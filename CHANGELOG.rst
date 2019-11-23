@@ -2,16 +2,19 @@
 Changelog for package ros1_ign_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.7.1 (2019-09-06)
+0.8.0 (2019-11-22)
 ------------------
-* Add replaces for each package
+* Add support for std_msgs/Empty (`#52 <https://github.com/osrf/ros_ign/issues/52>`_)
+* Add support for std_msgs/Bool (`#49 <https://github.com/osrf/ros_ign/issues/49>`_)
+  Signed-off-by: Michael Carroll <michael@openrobotics.org>
+* Add replaces for each package (`#46 <https://github.com/osrf/ros_ign/issues/46>`_)
 * Make all API and comments ROS-version agnostic
   Signed-off-by: Louise Poubel <louise@openrobotics.org>
 * Rename packages and fix compilation + tests
   Signed-off-by: Louise Poubel <louise@openrobotics.org>
 * Move files ros1 -> ros
   Signed-off-by: Louise Poubel <louise@openrobotics.org>
-* Contributors: Jose Luis Rivero, Louise Poubel
+* Contributors: Addisu Taddese, Louise Poubel, Michael Carroll, chapulina
 
 0.7.0 (2019-08-15)
 ------------------
