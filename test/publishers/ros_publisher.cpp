@@ -17,6 +17,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Float32.h>
+#include <std_msgs/Float64.h>
 #include <std_msgs/Header.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/Quaternion.h>
@@ -38,6 +39,7 @@
 #include <sensor_msgs/LaserScan.h>
 #include <sensor_msgs/MagneticField.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <tf2_msgs/TFMessage.h>
 #include "../test_utils.h"
 
 //////////////////////////////////////////////////
@@ -60,6 +62,11 @@ int main(int argc, char ** argv)
   ros::Publisher float_pub = n.advertise<std_msgs::Float32>("float", 1000);
   std_msgs::Float32 float_msg;
   ros_ign_bridge::testing::createTestMsg(float_msg);
+  
+  // std_msgs::Float64.
+  ros::Publisher double_pub = n.advertise<std_msgs::Float64>("double", 1000);
+  std_msgs::Float64 double_msg;
+  ros_ign_bridge::testing::createTestMsg(double_msg);
 
   // std_msgs::Header.
   ros::Publisher header_pub = n.advertise<std_msgs::Header>("header", 1000);
@@ -118,6 +125,12 @@ int main(int argc, char ** argv)
     n.advertise<geometry_msgs::TransformStamped>("transform_stamped", 1000);
   geometry_msgs::TransformStamped transform_stamped_msg;
   ros_ign_bridge::testing::createTestMsg(transform_stamped_msg);
+
+  // tf2_msgs::TFMessage.
+  ros::Publisher tf2_message_pub =
+    n.advertise<tf2_msgs::TFMessage>("tf2_message", 1000);
+  tf2_msgs::TFMessage tf2_msg;
+  ros_ign_bridge::testing::createTestMsg(tf2_msg);
 
   // geometry_msgs::Twist.
   ros::Publisher twist_pub =
@@ -197,6 +210,7 @@ int main(int argc, char ** argv)
     bool_pub.publish(bool_msg);
     empty_pub.publish(empty_msg);
     float_pub.publish(float_msg);
+    double_pub.publish(double_msg);
     header_pub.publish(header_msg);
     string_pub.publish(string_msg);
     quaternion_pub.publish(quaternion_msg);
@@ -207,6 +221,7 @@ int main(int argc, char ** argv)
     pose_stamped_pub.publish(pose_stamped_msg);
     transform_pub.publish(transform_msg);
     transform_stamped_pub.publish(transform_stamped_msg);
+    tf2_message_pub.publish(tf2_msg);
     twist_pub.publish(twist_msg);
     actuators_pub.publish(actuators_msg);
     odometry_pub.publish(odometry_msg);
