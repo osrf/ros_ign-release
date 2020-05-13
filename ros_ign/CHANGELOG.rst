@@ -2,6 +2,9 @@
 Changelog for package ros1_ign
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.9.1 (2020-05-13)
+------------------
+
 0.9.0 (2020-05-13)
 ------------------
 * Update Melodic docs (`#61 <https://github.com/ignitionrobotics/ros_ign/issues/61>`_)
