@@ -2,18 +2,6 @@
 
 This package contains demos showing how to use Ignition Gazebo with ROS.
 
-## Run Ignition Gazebo
-
-There's a convenient launch file, try for example:
-
-    roslaunch ros_ign_gazebo_demos ign_gazebo.launch args:="shapes.sdf"
-
-And you can directly call the executable, for example:
-
-    rosrun ros_ign_gazebo_demos ign_gazebo shapes.sdf
-
-![](images/shapes_demo.png)
-
 ## Air pressure
 
 Publishes fluid pressure readings.
@@ -55,7 +43,7 @@ Then send a command
 Depth camera data can be obtained as:
 
 * `sensor_msgs/Image`, through `ros_ign_bridge` or `ros_ign_image`
-* `sendor_msgs/PointCloud2`, through `ros_ign_point_cloud`
+* `sensor_msgs/PointCloud2`, through `ros_ign_point_cloud` (See issue #40)
 
 Using the image bridge (unidirectional, uses [image_transport](http://wiki.ros.org/image_transport)):
 
@@ -72,7 +60,7 @@ Using Ignition Gazebo plugin:
 GPU lidar data can be obtained as:
 
 * `sensor_msgs/LaserScan`, through the `ros_ign_bridge`
-* `sendor_msgs/PointCloud2`, through the `ros_ign_bridge` or `ros_ign_point_cloud`
+* `sensor_msgs/PointCloud2`, through the `ros_ign_bridge` or `ros_ign_point_cloud` (See issue #40)
 
 Using the bridge:
 
@@ -105,7 +93,7 @@ Publishes magnetic field readings.
 RGBD camera data can be obtained as:
 
 * `sensor_msgs/Image`, through `ros_ign_bridge` or `ros_ign_image`
-* `sendor_msgs/PointCloud2`, through `ros_ign_bridge` or `ros_ign_point_cloud`
+* `sensor_msgs/PointCloud2`, through `ros_ign_bridge` or `ros_ign_point_cloud` (See issue #40)
 
 Using the image bridge (unidirectional, uses [image_transport](http://wiki.ros.org/image_transport)):
 
@@ -132,3 +120,15 @@ Then send a command so the vehicle moves and drains the battery
     rostopic pub /model/vehicle_blue/cmd_vel geometry_msgs/Twist "{linear: {x: 5.0}, angular: {z: 0.5}}"
 
 ![](images/battery_demo.png)
+
+## Create entity
+
+Launch simulation and spawn entities:
+
+* Sphere from URDF loaded into ROS param
+* Box from SDF file on Ignition Fuel
+* Cylinder from SDF file
+
+`roslaunch ros_ign_gazebo_demos create.launch`
+
+![](images/create.png)
