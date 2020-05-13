@@ -19,6 +19,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Float32.h>
+#include <std_msgs/Float64.h>
 #include <std_msgs/Header.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/Point.h>
@@ -40,6 +41,7 @@
 #include <sensor_msgs/LaserScan.h>
 #include <sensor_msgs/MagneticField.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <tf2_msgs/TFMessage.h>
 #include <chrono>
 #include "../test_utils.h"
 
@@ -99,6 +101,18 @@ TEST(ROSSubscriberTest, Empty)
 TEST(ROSSubscriberTest, Float)
 {
   MyTestClass<std_msgs::Float32> client("float");
+
+  using namespace std::chrono_literals;
+  ros_ign_bridge::testing::waitUntilBoolVarAndSpin(
+    client.callbackExecuted, 10ms, 200);
+
+  EXPECT_TRUE(client.callbackExecuted);
+}
+
+/////////////////////////////////////////////////
+TEST(ROSSubscriberTest, Double)
+{
+  MyTestClass<std_msgs::Float64> client("double");
 
   using namespace std::chrono_literals;
   ros_ign_bridge::testing::waitUntilBoolVarAndSpin(
@@ -219,6 +233,18 @@ TEST(ROSSubscriberTest, Transform)
 TEST(ROSSubscriberTest, TransformStamped)
 {
   MyTestClass<geometry_msgs::TransformStamped> client("transform_stamped");
+
+  using namespace std::chrono_literals;
+  ros_ign_bridge::testing::waitUntilBoolVarAndSpin(
+    client.callbackExecuted, 10ms, 200);
+
+  EXPECT_TRUE(client.callbackExecuted);
+}
+
+/////////////////////////////////////////////////
+TEST(ROSSubscriberTest, TF2Message)
+{
+  MyTestClass<tf2_msgs::TFMessage> client("tf2_message");
 
   using namespace std::chrono_literals;
   ros_ign_bridge::testing::waitUntilBoolVarAndSpin(
