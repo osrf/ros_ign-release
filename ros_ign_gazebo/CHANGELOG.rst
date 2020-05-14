@@ -2,6 +2,9 @@
 Changelog for package ros_ign_gazebo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.9.3 (2020-05-14)
+------------------
+
 0.9.2 (2020-05-14)
 ------------------
 * Merge pull request `#77 <https://github.com/osrf/ros_ign/issues/77>`_ from ignitionrobotics/j-rivero-patch-2
