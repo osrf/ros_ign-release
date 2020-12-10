@@ -1,0 +1,28 @@
+sudo: required
+
+env:
+  matrix:
+    - DOCKER_IMAGE=ubuntu:18.04 IGN_COLLECTION="blueprint"
+    - DOCKER_IMAGE=ubuntu:18.04 IGN_COLLECTION="citadel"
+
+services:
+  - docker
+
+language: c++
+
+compiler:
+  - gcc
+
+before_install:
+  - echo $DOCKER_IMAGE
+  - echo $IGN_COLLECTION
+  - docker pull $DOCKER_IMAGE
+  - docker run  -e IGN_COLLECTION -d -v $(pwd):/code $DOCKER_IMAGE /bin/bash -c 'while true; do sleep 1; done'
+  - docker exec $(docker ps -aq) /bin/bash -c 'id'
+
+before_script:
+  - docker exec $(docker ps -aq) /bin/bash -c 'apt-get -qq update'
+  - docker exec $(docker ps -aq) /bin/bash -c 'apt-get install -y --force-yes build-essential'
+
+script:
+  - docker exec $(docker ps -aq) /bin/bash -c 'cd /code && ls -a && ./.travis/build'
