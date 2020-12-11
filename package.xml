@@ -1,6 +1,6 @@
-<package format="2">
+<package format="3">
   <name>ros_ign_bridge</name>
-  <version>0.9.3</version>
+  <version>0.9.4</version>
   <description>Bridge communication between ROS and Ignition Transport</description>
   <license>Apache 2.0</license>
   <maintainer email="caguero@openrobotics.org">Carlos Agüero</maintainer>
@@ -8,8 +8,6 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <depend>geometry_msgs</depend>
-  <depend>ignition-msgs4</depend>
-  <depend>ignition-transport7</depend>
   <depend>mav_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>rosgraph_msgs</depend>
@@ -19,6 +17,16 @@
   <depend>std_msgs</depend>
   <depend>std_srvs</depend>
   <depend>tf2_msgs</depend>
+
+  <!-- Default to Dome, support Citadel and Blueprint -->
+  <depend condition="$IGNITION_VERSION == blueprint">ignition-msgs4</depend>
+  <depend condition="$IGNITION_VERSION == blueprint">ignition-transport7</depend>
+  <depend condition="$IGNITION_VERSION == citadel">ignition-msgs5</depend>
+  <depend condition="$IGNITION_VERSION == citadel">ignition-transport8</depend>
+  <depend condition="$IGNITION_VERSION == dome">ignition-msgs6</depend>
+  <depend condition="$IGNITION_VERSION == dome">ignition-transport9</depend>
+  <depend condition="$IGNITION_VERSION == ''">ignition-msgs6</depend>
+  <depend condition="$IGNITION_VERSION == ''">ignition-transport9</depend>
 
   <build_depend>message_generation</build_depend>
   <exec_depend>message_runtime</exec_depend>
