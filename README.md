@@ -1,3 +1,31 @@
+## ros_ign (melodic) - 0.9.5-1
+
+The packages in the `ros_ign` repository were released into the `melodic` distro by running `/usr/bin/bloom-release --no-pull-request --rosdistro melodic --track melodic ros_ign` on `Tue, 30 Mar 2021 16:22:28 -0000`
+
+These packages were released:
+- `ros_ign`
+- `ros_ign_bridge`
+- `ros_ign_gazebo`
+- `ros_ign_gazebo_demos`
+- `ros_ign_image`
+
+Version of package(s) in repository `ros_ign`:
+
+- upstream repository: https://github.com/osrf/ros_ign
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `0.9.4-2`
+- new version: `0.9.5-1`
+
+Versions of tools used:
+
+- bloom version: `0.10.2`
+- catkin_pkg version: `0.4.23`
+- rosdep version: `0.20.0`
+- rosdistro version: `0.8.3`
+- vcstools version: `0.1.42`
+
+
 ## ros_ign (melodic) - 0.9.4-2
 
 The packages in the `ros_ign` repository were released into the `melodic` distro by running `/usr/bin/bloom-release --no-pull-request --rosdistro melodic --track melodic ros_ign` on `Fri, 11 Dec 2020 16:36:46 -0000`
