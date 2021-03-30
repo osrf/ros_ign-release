@@ -1,131 +1,165 @@
-[![Build Status](https://travis-ci.org/ignitionrobotics/ros_ign.svg?branch=melodic)](https://travis-ci.org/ignitionrobotics/ros_ign/branches)
+# Bridge communication between ROS and Ignition Transport
 
-ROS version | Ignition version | Branch | Binaries hosted at
--- | -- | -- | --
-Melodic | Blueprint | [melodic](https://github.com/osrf/ros_ign/tree/melodic) | https://packages.osrfoundation.org
-Melodic | Citadel | [melodic](https://github.com/osrf/ros_ign/tree/melodic) | only from source
-Melodic | Dome | [melodic](https://github.com/osrf/ros_ign/tree/melodic) | https://packages.osrfoundation.org
-Noetic | Blueprint | not supported |
-Noetic | Citadel | [noetic](https://github.com/osrf/ros_ign/tree/noetic) | https://packages.ros.org
-Noetic | Dome | [noetic](https://github.com/osrf/ros_ign/tree/noetic) | only from source
-Dashing | Blueprint | [dashing](https://github.com/osrf/ros_ign/tree/dashing) | only from source
-Dashing | Citadel | [dashing](https://github.com/osrf/ros_ign/tree/dashing) | only from source
-Dashing | Dome | not supported |
-Eloquent | Blueprint | [dashing](https://github.com/osrf/ros_ign/tree/dashing) | only from source
-Eloquent | Citadel | [dashing](https://github.com/osrf/ros_ign/tree/dashing) | only from source
-Eloquent | Dome | not supported |
-Foxy | Blueprint | not supported |
-Foxy | Citadel | [ros2](https://github.com/osrf/ros_ign/tree/ros2) | https://packages.ros.org
-Foxy | Dome | [ros2](https://github.com/osrf/ros_ign/tree/ros2) | only from source
+This package provides a network bridge which enables the exchange of messages
+between ROS and Ignition Transport.
 
-> Please [ticket an issue](https://github.com/ignitionrobotics/ros_ign/issues/) if you'd like support to be added for some combination.
+The bridge is currently implemented in C++. At this point there's no support for
+service calls. Its support is limited to only the following message types:
 
-# Integration between ROS and Ignition
+| ROS type                       | Ignition Transport type          |
+|--------------------------------|:--------------------------------:|
+| std_msgs/Bool                  | ignition::msgs::Boolean          |
+| std_msgs/ColorRGBA             | ignition::msgs::Color            |
+| std_msgs/Empty                 | ignition::msgs::Empty            |
+| std_msgs/Int32                 | ignition::msgs::Int32            |
+| std_msgs/Float32               | ignition::msgs::Float            |
+| std_msgs/Float64               | ignition::msgs::Double           |
+| std_msgs/Header                | ignition::msgs::Header           |
+| std_msgs/String                | ignition::msgs::StringMsg        |
+| geometry_msgs/Quaternion       | ignition::msgs::Quaternion       |
+| geometry_msgs/Vector3          | ignition::msgs::Vector3d         |
+| geometry_msgs/Point            | ignition::msgs::Vector3d         |
+| geometry_msgs/Pose             | ignition::msgs::Pose             |
+| geometry_msgs/PoseArray        | ignition::msgs::Pose_V           |
+| geometry_msgs/PoseStamped      | ignition::msgs::Pose             |
+| geometry_msgs/Transform        | ignition::msgs::Pose             |
+| geometry_msgs/TransformStamped | ignition::msgs::Pose             |
+| geometry_msgs/Twist            | ignition::msgs::Twist            |
+| mav_msgs/Actuators             | ignition::msgs::Actuators        |
+| nav_msgs/OccupancyGrid         | ignition::msgs::OccupancyGrid    |
+| nav_msgs/Odometry              | ignition::msgs::Odometry         |
+| rosgraph_msgs/Clock            | ignition::msgs::Clock            |
+| sensor_msgs/BatteryState       | ignition::msgs::BatteryState     |
+| sensor_msgs/CameraInfo         | ignition::msgs::CameraInfo       |
+| sensor_msgs/FluidPressure      | ignition::msgs::FluidPressure    |
+| sensor_msgs/Imu                | ignition::msgs::IMU              |
+| sensor_msgs/Image              | ignition::msgs::Image            |
+| sensor_msgs/JointState         | ignition::msgs::Model            |
+| sensor_msgs/LaserScan          | ignition::msgs::LaserScan        |
+| sensor_msgs/MagneticField      | ignition::msgs::Magnetometer     |
+| sensor_msgs/PointCloud2        | ignition::msgs::PointCloudPacked |
+| tf_msgs/TFMessage              | ignition::msgs::Pose_V           |
+| visualization_msgs/Marker      | ignition::msgs::Marker           |
+| visualization_msgs/MarkerArray | ignition::msgs::Marker_V         |
 
-## Packages
+Run `rosmaster & rosrun ros_ign_bridge parameter_bridge -h` for instructions.
 
-This repository holds packages that provide integration between
-[ROS](http://www.ros.org/) and [Ignition](https://ignitionrobotics.org):
+## Example 1a: Ignition Transport talker and ROS listener
 
-* [ros_ign](https://github.com/osrf/ros_ign/tree/melodic/ros_ign):
-  Metapackage which provides all the other packages.
-* [ros_ign_image](https://github.com/osrf/ros_ign/tree/melodic/ros_ign_image):
-  Unidirectional transport bridge for images from
-  [Ignition Transport](https://ignitionrobotics.org/libs/transport)
-  to ROS using
-  [image_transport](http://wiki.ros.org/image_transport).
-* [ros_ign_bridge](https://github.com/osrf/ros_ign/tree/melodic/ros_ign_bridge):
-  Bidirectional transport bridge between
-  [Ignition Transport](https://ignitionrobotics.org/libs/transport)
-  and ROS.
-* [ros_ign_gazebo](https://github.com/osrf/ros_ign/tree/melodic/ros_ign_gazebo):
-  Convenient launch files and executables for using
-  [Ignition Gazebo](https://ignitionrobotics.org/libs/gazebo)
-  with ROS.
-* [ros_ign_gazebo_demos](https://github.com/osrf/ros_ign/tree/melodic/ros_ign_gazebo_demos):
-  Demos using the ROS-Ignition integration.
-* [ros_ign_point_cloud](https://github.com/osrf/ros_ign/tree/melodic/ros_ign_point_cloud):
-  Plugins for publishing point clouds to ROS from
-  [Ignition Gazebo](https://ignitionrobotics.org/libs/gazebo) simulations.
+First we start a ROS `roscore`:
 
-## Install
+```
+# Shell A:
+. /opt/ros/melodic/setup.bash
+roscore
+```
 
-This branch supports ROS Melodic. See above for other ROS versions.
+Then we start the parameter bridge which will watch the specified topics.
 
-### Binaries
+```
+# Shell B:
+. ~/bridge_ws/install/setup.bash
+rosrun ros_ign_bridge parameter_bridge /chatter@std_msgs/String@ignition.msgs.StringMsg
+```
 
-At the moment, Melodic binaries are only available for Blueprint.
-They are hosted at https://packages.osrfoundation.org.
+Now we start the ROS listener.
 
-1. Add https://packages.osrfoundation.org
+```
+# Shell C:
+. /opt/ros/melodic/setup.bash
+rostopic echo /chatter
+```
 
-        sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
-        wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
-        sudo apt-get update
+Now we start the Ignition Transport talker.
 
-1. Install `ros_ign`
+```
+# Shell D:
+ign topic pub -t /chatter -m ignition.msgs.StringMsg -p 'data:"Hello"'
+```
 
-        sudo apt install ros-melodic-ros-ign
+## Example 1b: ROS talker and Ignition Transport listener
 
-### From source
+First we start a ROS `roscore`:
 
-### ROS
+```
+# Shell A:
+. /opt/ros/melodic/setup.bash
+roscore
+```
 
-Be sure you've installed
-[ROS Melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) (at least ROS-Base).
-More ROS dependencies will be installed below.
+Then we start the parameter bridge which will watch the specified topics.
 
-### Ignition
+```
+# Shell B:
+. ~/bridge_ws/install/setup.bash
+rosrun ros_ign_bridge parameter_bridge /chatter@std_msgs/String@ignition.msgs.StringMsg
+```
 
-Install either [Blueprint or Citadel](https://ignitionrobotics.org/docs).
+Now we start the Ignition Transport listener.
 
-Set the `IGNITION_VERSION` environment variable to the Ignition version you'd
-like to compile against. For example:
+```
+# Shell C:
+ign topic -e -t /chatter
+```
 
-    export IGNITION_VERSION=citadel
+Now we start the ROS talker.
 
-> You only need to set this variable when compiling, not when running.
+```
+# Shell D:
+. /opt/ros/melodic/setup.bash
+rostopic pub /chatter std_msgs/String "data: 'Hi'" --once
+```
 
-### Compile ros_ign
+## Example 2: Run the bridge and exchange images
 
-The following steps are for Linux and OSX.
+In this example, we're going to generate Ignition Transport images using Gazebo,
+that will be converted into ROS images, and visualized with `rqt_viewer`.
 
-1. Create a catkin workspace:
+First we start a ROS `roscore`:
 
-    ```
-    # Setup the workspace
-    mkdir -p ~/ws/src
-    cd ~/ws/src
+```
+# Shell A:
+. /opt/ros/melodic/setup.bash
+roscore
+```
 
-    # Download needed software
-    git clone https://github.com/osrf/ros_ign.git -b melodic
-    ```
+Then we start Gazebo.
 
-1. Install ROS dependencies:
+```
+# Shell B:
+gazebo
+```
 
-    ```
-    cd ~/ws
-    rosdep install --from-paths src -i -y --rosdistro melodic \
-      --skip-keys=ignition-gazebo2 \
-      --skip-keys=ignition-gazebo3 \
-      --skip-keys=ignition-msgs4 \
-      --skip-keys=ignition-msgs5 \
-      --skip-keys=ignition-rendering2 \
-      --skip-keys=ignition-rendering3 \
-      --skip-keys=ignition-sensors2 \
-      --skip-keys=ignition-sensors3 \
-      --skip-keys=ignition-transport7 \
-      --skip-keys=ignition-transport8
+Once Gazebo is running, click on the `Insert` tab, and then, insert a `Camera`
+object into the scene. Now, let's see the topic where the camera images are
+published.
 
-    ```
+```
+# Shell C:
+ign topic -l | grep image
+/default/camera/link/camera/image
+```
 
-1. Build the workspace:
+Then we start the parameter bridge with the previous topic.
 
-    ```
-    # Source ROS distro's setup.bash
-    source /opt/ros/melodic/setup.bash
+```
+# Shell D:
+. ~/bridge_ws/install/setup.bash
+rosrun ros_ign_bridge parameter_bridge /default/camera/link/camera/image@sensor_msgs/Image@ignition.msgs.Image
+```
 
-    # Build and install into workspace
-    cd ~/ws/
-    catkin_make install
-    ```
+Now we start the ROS GUI:
+
+```
+# Shell E:
+. /opt/ros/melodic/setup.bash
+rqt_image_view /default/camera/link/camera/image
+```
+
+You should see the current images in `rqt_image_view` which are coming from
+Gazebo (published as Ignition Msgs over Ignition Transport).
+
+The screenshot shows all the shell windows and their expected content
+(it was taken using ROS Kinetic):
+
+![Ignition Transport images and ROS rqt](images/bridge_image_exchange.png)
