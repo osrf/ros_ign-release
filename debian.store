@@ -1,1 +1,1 @@
-{"base": "7168020", "parent": "debian/melodic/ros_ign_bridge", "previous": "ebcbb77", "trim": "", "trimbase": ""}
+{"trim": "", "base": "d284083", "trimbase": "", "parent": "debian/melodic/ros_ign_bridge", "previous": "9ca4354"}
