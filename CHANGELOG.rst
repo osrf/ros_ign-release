@@ -2,6 +2,13 @@
 Changelog for package ros1_ign_image
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.9.6 (2021-10-25)
+------------------
+* Support fortress with melodic (`#182 <https://github.com/ignitionrobotics/ros_ign/issues/182>`_)
+  Co-authored-by: Nate Koenig <nate@openrobotics.org>
+  Co-authored-by: Louise Poubel <louise@openrobotics.org>
+* Contributors: Nate Koenig
+
 0.9.5 (2021-03-30)
 ------------------
 
